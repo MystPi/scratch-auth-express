@@ -1,0 +1,32 @@
+{
+  "name": "sa-express",
+  "version": "1.0.0",
+  "description": "No-pain Express middleware for Scratch Auth that uses JWTs — just plug and play, minimal setup required",
+  "main": "./lib/",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node ./demo/"
+  },
+  "keywords": [
+    "scratch auth",
+    "scratch",
+    "auth",
+    "express",
+    "jwt",
+    "token",
+    "middleware",
+    "simple",
+    "easy"
+  ],
+  "author": "MystPi",
+  "license": "MIT",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "jsonwebtoken": "^8.5.1",
+    "memoizee": "^0.4.15",
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "express": "^4.18.1"
+  }
+}
