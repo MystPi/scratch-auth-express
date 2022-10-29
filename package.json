@@ -1,7 +1,7 @@
 {
   "name": "sa-express",
   "version": "1.0.0",
-  "description": "No-pain Express middleware for Scratch Auth that uses JWTs — just plug and play, minimal setup required",
+  "description": "Express with Scratch Auth has never been easier—just plug and play, minimal setup required",
   "main": "./lib/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

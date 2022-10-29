@@ -1,4 +1,4 @@
-# No-pain Express middleware for Scratch Auth
+# Express with Scratch Auth has never been easier
 
 ![JWT Compatible](https://jwt.io/img/badge-compatible.svg)
 
