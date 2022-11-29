@@ -12,8 +12,8 @@
     "scratch",
     "auth",
     "express",
-    "jwt",
-    "token",
+    "session",
+    "cookie-session",
     "middleware",
     "simple",
     "easy"
@@ -21,9 +21,7 @@
   "author": "MystPi",
   "license": "MIT",
   "dependencies": {
-    "cookie-parser": "^1.4.6",
-    "jsonwebtoken": "^8.5.1",
-    "memoizee": "^0.4.15",
+    "cookie-session": "^2.0.0",
     "node-fetch": "^2.6.7"
   },
   "devDependencies": {
