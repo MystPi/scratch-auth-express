@@ -106,13 +106,15 @@ app.get('/dashboard', getUser, (req, res) => {
   res.send(`You are ${res.locals.username}`);
 });
 
-// ...or use `req.session.username` directly
+// ...or use `req.session.username` directly (which only contains `username`)
 app.get('/dashboard', (req, res) => {
   res.send(`You are ${req.session.username}`);
 });
 
-// The benefit of using `getUser` are the convenience properties like `loggedIn`,
-// and more properties might be added in the future.
+// Benefits of `getUser`:
+// - Convenience properties like `loggedIn`
+// - Being able to access those properties in `res.render` without having to pass
+// locals manually
 ```
 
 #### Options
