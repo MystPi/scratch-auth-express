@@ -23,7 +23,7 @@ app.use(session('supersecret'));
 
 // This middleware populates `res.locals` with useful information. If you don't
 // need this information on every route, you can use the middleware individually
-// or you can access `req.session` directly (see the 'Using Auth/Protected Routes
+// or you can access `req.session` directly (see the 'Using Auth/Protected Routes'
 // section below).
 app.use(getUser);
 ```
