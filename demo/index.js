@@ -1,16 +1,15 @@
 const express = require('express');
-const { middleware, startAuth, endAuth, getUser, logout } = require('../');
+const { session, startAuth, endAuth, getUser, logout } = require('../');
 
 const app = express();
 
-app.set('auth secret', 'supersecret');
-app.use(middleware);
+app.use(session('supersecret'));
 app.use(getUser);
 
 app.get('/', (req, res) => {
-  if (req.authUser) {
+  if (res.locals.loggedIn) {
     res.send(`
-      <h1>You are signed in as ${req.authUser}</h1>
+      <h1>You are signed in as ${res.locals.username}</h1>
       <p>Head to your <a href="/dashboard">dashboard</a></p>
     `);
   } else {
@@ -23,8 +22,8 @@ app.get('/', (req, res) => {
 
 app.get('/auth', startAuth({ redirect: '/auth/end' }));
 
-app.get('/auth/end', endAuth(), (req, res) => {
-  if (req.authSucceeded) {
+app.get('/auth/end', endAuth, (req, res) => {
+  if (res.locals.authSucceeded) {
     res.redirect('/dashboard');
   } else {
     res.send('<h1>Fail! <a href="/auth">Click here</a> to try again.');
@@ -32,9 +31,9 @@ app.get('/auth/end', endAuth(), (req, res) => {
 });
 
 app.get('/dashboard', (req, res) => {
-  if (req.authUser) {
+  if (res.locals.loggedIn) {
     res.send(`
-      <h1>Welcome to your dashboard, ${req.authUser}!</h1>
+      <h1>Welcome to your dashboard, ${res.locals.username}!</h1>
       <p><a href="/logout">logout</a> &bull; <a href="/">home</a></p>
     `);
   } else {
