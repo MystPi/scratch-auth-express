@@ -1,10 +1,18 @@
 const express = require('express');
-const { session, startAuth, endAuth, getUser, logout } = require('../');
+const scratchauth = require('../');
 
 const app = express();
 
-app.use(session('supersecret'));
-app.use(getUser);
+scratchauth(app, {
+  secret: 'supersecret',
+  appName: 'Express App',
+  succeeded(req, res) {
+    res.redirect('/dashboard');
+  },
+  failed(req, res) {
+    res.send('<h1>Fail! <a href="/auth/login">Click here</a> to try again.');
+  },
+});
 
 app.get('/', (req, res) => {
   if (res.locals.loggedIn) {
@@ -15,18 +23,8 @@ app.get('/', (req, res) => {
   } else {
     res.send(`
       <h1>You are not signed in</h1>
-      <p><a href="/auth">Click here</a> to sign in.</p>
+      <p><a href="/auth/login">Click here</a> to sign in.</p>
     `);
-  }
-});
-
-app.get('/auth', startAuth({ redirect: '/auth/end' }));
-
-app.get('/auth/end', endAuth, (req, res) => {
-  if (res.locals.authSucceeded) {
-    res.redirect('/dashboard');
-  } else {
-    res.send('<h1>Fail! <a href="/auth">Click here</a> to try again.');
   }
 });
 
@@ -34,14 +32,12 @@ app.get('/dashboard', (req, res) => {
   if (res.locals.loggedIn) {
     res.send(`
       <h1>Welcome to your dashboard, ${res.locals.username}!</h1>
-      <p><a href="/logout">logout</a> &bull; <a href="/">home</a></p>
+      <p><a href="/auth/logout">logout</a> &bull; <a href="/">home</a></p>
     `);
   } else {
-    res.redirect('/auth');
+    res.redirect('/auth/login');
   }
 });
-
-app.get('/logout', logout());
 
 app.listen(1234, () => {
   console.log('Listening on port 1234: http://localhost:1234');
