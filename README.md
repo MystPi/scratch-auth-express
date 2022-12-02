@@ -29,7 +29,7 @@ scratchauth(app, {
 });
 ```
 
-#### Options
+### Options
 
 - `secret` Secret that `cookie-session` will use. It should be stored securely in an environment variable. This is the only required option.
 - `appName` Name for Scratch Auth to use on the login page.
