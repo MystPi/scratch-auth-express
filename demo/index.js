@@ -3,7 +3,7 @@ const scratchauth = require('../');
 
 const app = express();
 
-scratchauth(app, {
+const protected = scratchauth(app, {
   secret: 'supersecret',
   appName: 'Express App',
   succeeded(req, res) {
@@ -28,15 +28,11 @@ app.get('/', (req, res) => {
   }
 });
 
-app.get('/dashboard', (req, res) => {
-  if (res.locals.loggedIn) {
-    res.send(`
-      <h1>Welcome to your dashboard, ${res.locals.username}!</h1>
-      <p><a href="/auth/logout">logout</a> &bull; <a href="/">home</a></p>
-    `);
-  } else {
-    res.redirect('/auth/login');
-  }
+app.get('/dashboard', protected(), (req, res) => {
+  res.send(`
+    <h1>Welcome to your dashboard, ${res.locals.username}!</h1>
+    <p><a href="/auth/logout">logout</a> &bull; <a href="/">home</a></p>
+  `);
 });
 
 app.listen(1234, () => {

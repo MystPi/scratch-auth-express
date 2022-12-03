@@ -60,4 +60,13 @@ module.exports = (
     req.session = null;
     res.redirect(logoutRedirect);
   });
+
+  return (route = loginRoute) =>
+    (req, res, next) => {
+      if (res.locals.loggedIn) {
+        next();
+      } else {
+        res.redirect(route);
+      }
+    };
 };
