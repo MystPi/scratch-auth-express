@@ -3,7 +3,7 @@ const scratchauth = require('../');
 
 const app = express();
 
-const protected = scratchauth(app, {
+const needsAuth = scratchauth(app, {
   secret: 'supersecret',
   appName: 'Express App',
   succeeded(req, res) {
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
   }
 });
 
-app.get('/dashboard', protected(), (req, res) => {
+app.get('/dashboard', needsAuth(), (req, res) => {
   res.send(`
     <h1>Welcome to your dashboard, ${res.locals.username}!</h1>
     <p><a href="/auth/logout">logout</a> &bull; <a href="/">home</a></p>

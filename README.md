@@ -17,7 +17,7 @@ const scratchauth = require('sa-express');
 
 const app = express();
 
-const protected = scratchauth(app, {
+const needsAuth = scratchauth(app, {
   secret: 'SuperSecret1234',
   appName: 'My Cool Express App',
   succeeded(req, res) {
@@ -46,7 +46,7 @@ const protected = scratchauth(app, {
 Calling `scratchauth` returns a middleware for protected routes. It will redirect the user to the route given if they are not logged in. By default, the route is whatever you passed for `loginRoute`.
 
 ```js
-app.get('/dashboard', protected(), (req, res) => {
+app.get('/dashboard', needsAuth(), (req, res) => {
   res.send(`Welcome to your dashboard, ${res.locals.username}!`);
 });
 ```
@@ -63,7 +63,7 @@ app.get('/dashboard', (req, res) => {
 });
 ```
 
-In fact, `protected()` uses `res.locals.loggedIn` under the hood, so both of the methods are exactly equivalent.
+In fact, `needsAuth` uses `res.locals.loggedIn` under the hood, so both of the methods are exactly equivalent.
 
 ## Demo Application
 
