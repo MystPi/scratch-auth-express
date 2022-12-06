@@ -31,15 +31,22 @@ const needsAuth = scratchauth(app, {
 
 ### Options
 
-- `secret` Secret that `cookie-session` will use. It should be stored securely in an environment variable. This is the only required option.
-- `appName` Name for Scratch Auth to use on the login page.
-- `loginRoute: /auth/login` Route for redirecting the user to Scratch Auth.
-- `verifyRoute: /auth/verify` Route for verifying Scratch Auth's repsonse.
-- `logoutRoute: /auth/logout` Route for logging the user out.
-- `logoutRedirect: /` Route to redirect to after logging out.
-- `succeeded: (req, res) => res.redirect('/')` Called when the user has been logged in successfully.
-- `failed: (req, res) => res.send('Auth failed')` Called when auth has failed.
-- `cookie` By default lasts 7 days with `sameSite: lax`. [More options here.](https://github.com/expressjs/cookie-session#cookie-options)
+- `secret` — Secret that `cookie-session` will use. It should be stored securely in an environment variable. This is the only required option.
+- `appName` — Name for Scratch Auth to use on the login page.
+  - Default: empty string
+- `loginRoute` — Route for redirecting the user to Scratch Auth.
+  - Default: `/auth/login`
+- `verifyRoute` — Route for verifying Scratch Auth's repsonse.
+  - Default: `/auth/verify`
+- `logoutRoute` — Route for logging the user out.
+  - Default: `/auth/logout`
+- `logoutRedirect` — Route to redirect to after logging out.
+  - Default: `/`
+- `succeeded` — Called when the user has been logged in successfully.
+  - Default: `(req, res) => res.redirect('/')`
+- `failed` — Called when auth has failed.
+  - Default: `(req, res) => res.send('Auth failed')`
+- `cookie` — By default lasts 7 days with `sameSite: lax`. [More options here.](https://github.com/expressjs/cookie-session#cookie-options)
 
 ### Using Auth/Protected Routes
 
