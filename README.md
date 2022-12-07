@@ -1,4 +1,4 @@
-# Express with Scratch Auth has never been easier
+# Scratch Auth integration for Express
 
 - Plug and play, minimal setup required
 - Easy to use
@@ -9,117 +9,68 @@
 npm install sa-express
 ```
 
-## Initial Setup
+## Usage
 
 ```js
 const express = require('express');
+const scratchauth = require('sa-express');
 
-// Import the middleware needed for configuration
-const { session, getUser } = require('sa-express');
+const app = express();
 
-// Use the session middleware. Replace 'supersecret' with a secure password hidden
-// in an environment variable.
-app.use(session('supersecret'));
-
-// This middleware populates `res.locals` with useful information. If you don't
-// need this information on every route, you can use the middleware individually
-// or you can access `req.session` directly (see the 'Using Auth/Protected Routes'
-// section below).
-app.use(getUser);
-```
-
-#### Options (for `session()`)
-
-- `secret` — Secret for `cookie-session`
-- `maxAge` — The amount of time, in milliseconds, that the login will be valid for
-- `otherOpts` — Other options to pass to `cookie-parser` ([docs](https://github.com/expressjs/cookie-session#options))
-
-## Usage
-
-### Starting Auth
-
-```js
-const { startAuth } = require('sa-express');
-
-// `startAuth` will redirect the user to Scratch Auth for authentication. After
-// auth the user will be directed back to the verification route you provide
-app.get('/auth', startAuth({ redirect: '/auth/end' }));
-```
-
-#### Options
-
-- `redirect: '/'` — Route to redirect to after auth
-- `name: ''` — Name of your app for Scratch Auth to use
-
-### Verifying Auth
-
-```js
-const { endAuth } = require('sa-express');
-
-// `endAuth` will verify the auth response sent by `startAuth`. If it succeeds,
-// `res.locals.authSucceeded` will be true and the username will be stored in the
-// session
-app.get('/auth/end', endAuth, (req, res) => {
-  if (res.locals.authSucceeded) {
-    res.redirect('/dashboard');
-  } else {
-    res.send('Auth failed!');
-  }
+const needsAuth = scratchauth(app, {
+  secret: 'SuperSecret1234',
+  appName: 'My Cool Express App',
+  succeeded(req, res) {
+    res.redirect('/welcome');
+  },
+  failed(req, res) {
+    res.redirect('/authfailed');
+  },
 });
 ```
 
-#### Options
+### Options
 
-N/A
-
-### Logging Out
-
-```js
-const { logout } = require('sa-express');
-
-// `logout` will clear the session, effectively logging out the user
-app.get('/logout', logout());
-```
-
-#### Options
-
-- `redirect: '/'` — Route to redirect to after logging out
+- `secret` — Secret that `cookie-session` will use. It should be stored securely in an environment variable. This is the only required option.
+- `appName` — Name for Scratch Auth to use on the login page.
+  - Default: empty string
+- `loginRoute` — Route for redirecting the user to Scratch Auth.
+  - Default: `/auth/login`
+- `verifyRoute` — Route for verifying Scratch Auth's repsonse.
+  - Default: `/auth/verify`
+- `logoutRoute` — Route for logging the user out.
+  - Default: `/auth/logout`
+- `logoutRedirect` — Route to redirect to after logging out.
+  - Default: `/`
+- `succeeded` — Called when the user has been logged in successfully.
+  - Default: `(req, res) => res.redirect('/')`
+- `failed` — Called when auth has failed.
+  - Default: `(req, res) => res.send('Auth failed')`
+- `cookie` — By default lasts 7 days with `sameSite: lax`. [More options here.](https://github.com/expressjs/cookie-session#cookie-options)
 
 ### Using Auth/Protected Routes
 
-```js
-const { getUser } = require('sa-express');
+Calling `scratchauth` returns a middleware for protected routes. It will redirect the user to the route given if they are not logged in. By default, the route is whatever you passed for `loginRoute`.
 
-// If you configured Express to use the `getUser` middleware on all routes,
-// `res.locals` will contain `username` and `loggedIn`
+```js
+app.get('/dashboard', needsAuth(), (req, res) => {
+  res.send(`Welcome to your dashboard, ${res.locals.username}!`);
+});
+```
+
+You can manually implement protected routes by using `res.locals.loggedIn`:
+
+```js
 app.get('/dashboard', (req, res) => {
   if (res.locals.loggedIn) {
     res.send(`Welcome to your dashboard, ${res.locals.username}!`);
   } else {
-    res.redirect('/auth');
+    res.redirect('/auth/login');
   }
 });
-
-// If not, you have two options. Either use `getUser` before an idividual handler,
-// and use `res.locals` like normal...
-app.get('/dashboard', getUser, (req, res) => {
-  res.send(`You are ${res.locals.username}`);
-});
-
-// ...or use `req.session.username` directly (which only contains `username`)
-app.get('/dashboard', (req, res) => {
-  res.send(`You are ${req.session.username}`);
-});
-
-// Benefits of `getUser`:
-// - Convenience properties like `loggedIn`
-// - Being able to access those properties in `res.render` without having to pass
-// locals manually
 ```
 
-#### Options
-
-N/A
+In fact, `needsAuth` uses `res.locals.loggedIn` under the hood, so both of the methods are exactly equivalent.
 
 ## Demo Application
 
