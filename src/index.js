@@ -12,7 +12,7 @@ module.exports = (
     logoutRedirect = '/',
     succeeded = (req, res) => res.redirect('/'),
     failed = (req, res) => res.send('Auth failed'),
-    cookie,
+    cookie = {},
   }
 ) => {
   app.use(
