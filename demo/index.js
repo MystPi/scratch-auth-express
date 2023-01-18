@@ -1,5 +1,5 @@
 const express = require('express');
-const scratchauth = require('../');
+const scratchauth = require('../src');
 
 const app = express();
 
