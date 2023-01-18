@@ -2,7 +2,7 @@
   "name": "sa-express",
   "version": "3.0.1",
   "description": "Scratch Auth integration for Express. Just plug and play, minimal setup required",
-  "main": "src/",
+  "exports": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node demo/",
