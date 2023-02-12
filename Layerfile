@@ -3,7 +3,7 @@ FROM vm/ubuntu:18.04
 # To note: Layerfiles create VMs, *not* containers!
 
 # Install node
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash && \
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash && \
     apt install nodejs && \
     rm -f /etc/apt/sources.list.d/nodesource.list
 RUN npm install -g http-server
