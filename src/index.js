@@ -34,7 +34,7 @@ module.exports = (
 
   app.get(loginRoute, (req, res) => {
     const encoded = Buffer.from(
-      req.protocol + '://' + domain || req.get('host') + verifyRoute
+      req.protocol + '://' + (domain || req.get('host')) + verifyRoute
     ).toString('base64');
     res.redirect(
       `https://auth.itinerary.eu.org/auth/?redirect=${encoded}&name=${appName}`
