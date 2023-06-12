@@ -46,7 +46,7 @@ const needsAuth = scratchauth(app, {
 
 ### Using Auth/Protected Routes
 
-Calling `scratchauth` returns a middleware for protected routes. It will redirect the user to the route given if they are not logged in. By default, the route is whatever you passed for `loginRoute`.
+Calling `scratchauth` returns a middleware for protected routes. It will redirect the user if they are not logged in. By default, the redirect route is whatever you passed for `loginRoute`.
 
 ```js
 app.get('/dashboard', needsAuth(), (req, res) => {
@@ -66,7 +66,7 @@ app.get('/dashboard', (req, res) => {
 });
 ```
 
-In fact, `needsAuth` uses `res.locals.loggedIn` under the hood, so both of the methods are exactly equivalent.
+In fact, `needsAuth` uses `res.locals.loggedIn` under the hood, so both of the methods are equivalent.
 
 ## Demo Application
 
